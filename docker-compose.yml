@@ -1,0 +1,32 @@
+services:
+  postgres:
+    container_name: inventory
+    image: postgres:latest
+    environment:
+      POSTGRES_PASSWORD: secret
+      POSTGRES_USER: anomy
+      POSTGRES_DB: inventory
+    ports:
+      - '5432:5432'
+    volumes:
+      - inventory:/var/lib/postgresql/data
+    networks:
+      - webnet
+    restart: always
+  pgadmin:
+    image: dpage/pgadmin4
+    restart: always
+    ports:
+      - '8080:80'
+    environment:
+      PGADMIN_DEFAULT_EMAIL: admin@admin.com
+      PGADMIN_DEFAULT_PASSWORD: admin
+    volumes:
+      - inventory_pg:/var/lib/pgadmin
+    networks:
+      - webnet
+volumes:
+  inventory: {}
+  inventory_pg: {}
+networks:
+  webnet:
