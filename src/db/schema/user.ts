@@ -1,5 +1,6 @@
 import { boolean, integer, pgTable, primaryKey, text, timestamp } from 'drizzle-orm/pg-core';
 import { AdapterAccountType } from 'next-auth/adapters';
+import family from './family';
 
 export const users = pgTable('user', {
   id: text('id')
@@ -9,6 +10,7 @@ export const users = pgTable('user', {
   email: text('email').notNull(),
   emailVerified: timestamp('emailVerified', { mode: 'date' }),
   image: text('image'),
+  familyId: integer('family_id').references(() => family.id),
 });
 
 export const accounts = pgTable(
