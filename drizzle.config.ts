@@ -13,6 +13,6 @@ export default {
     database: process.env.DB_NAME!,
     url: process.env.DATABASE_URL!,
   },
-  verbose: true,
+  verbose: false,
   strict: true,
 } satisfies Config;

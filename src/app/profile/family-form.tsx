@@ -23,20 +23,24 @@ import {
 import { Input } from '@/components/ui/input';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
+import { createFamilyAction } from './actions';
+import { familyFormSchema } from './schema';
+import { useTransition } from 'react';
 
 export function FamilyForm() {
-  const form = useForm<z.infer<typeof formSchema>>({
-    resolver: zodResolver(formSchema),
+  const [isPending, startTransition] = useTransition();
+  const form = useForm<z.infer<typeof familyFormSchema>>({
+    resolver: zodResolver(familyFormSchema),
     defaultValues: {
       name: '',
       description: '',
     },
   });
 
-  function onSubmit(values: z.infer<typeof formSchema>) {
-    // Do something with the form values.
-    // ✅ This will be type-safe and validated.
-    console.log(values);
+  function onSubmit(values: z.infer<typeof familyFormSchema>) {
+    startTransition(() => {
+      createFamilyAction(values);
+    });
   }
   return (
     <Dialog>
@@ -61,7 +65,7 @@ export function FamilyForm() {
                 <FormItem>
                   <FormLabel>Family Name</FormLabel>
                   <FormControl>
-                    <Input placeholder="My lovely family" {...field} />
+                    <Input placeholder="My lovely family" {...field} disabled={isPending} />
                   </FormControl>
                   <FormDescription>This is the name of your family</FormDescription>
                   <FormMessage />
@@ -75,7 +79,11 @@ export function FamilyForm() {
                 <FormItem>
                   <FormLabel>Description</FormLabel>
                   <FormControl>
-                    <Input placeholder="My cute lovely family or little three fellas" {...field} />
+                    <Input
+                      placeholder="My cute lovely family or little three fellas"
+                      {...field}
+                      disabled={isPending}
+                    />
                   </FormControl>
                   <FormDescription>Give a description to your family</FormDescription>
                   <FormMessage />
@@ -84,22 +92,12 @@ export function FamilyForm() {
             />
           </Form>
           <DialogFooter>
-            <Button onClick={() => form.handleSubmit(onSubmit)}>Submit</Button>
+            <Button onClick={() => form.handleSubmit(onSubmit)} disabled={isPending}>
+              Submit
+            </Button>
           </DialogFooter>
         </form>
       </DialogContent>
     </Dialog>
   );
 }
-
-const formSchema = z.object({
-  name: z.string().min(2, {
-    message: 'Family name is too short!',
-  }),
-  description: z
-    .string()
-    .min(2, {
-      message: 'Family description is too short!',
-    })
-    .nullable(),
-});

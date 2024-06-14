@@ -11,7 +11,7 @@ export const connection = postgres(process.env.DATABASE_URL!, {
 
 export const db = drizzle(connection, {
   schema,
-  logger: true,
+  logger: false,
 });
 
 export type db = typeof db;
