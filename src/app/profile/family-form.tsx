@@ -38,8 +38,9 @@ export function FamilyForm() {
   });
 
   function onSubmit(values: z.infer<typeof familyFormSchema>) {
-    startTransition(() => {
-      createFamilyAction(values);
+    startTransition(async () => {
+      const res = await createFamilyAction(values);
+      form.setError('root', { message: res.message });
     });
   }
   return (

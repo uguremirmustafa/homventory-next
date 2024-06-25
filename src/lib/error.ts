@@ -1,5 +1,3 @@
 export const errors = {
-  unauthorized: {
-    message: 'Not authorized',
-  },
+  unauthorized: 'Not authorized',
 };

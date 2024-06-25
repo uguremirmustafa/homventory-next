@@ -9,7 +9,7 @@ import type { NextRequest } from 'next/server';
 
 // This function can be marked `async` if using `await` inside
 export default async function middleware(request: NextRequest) {
-  const session = await auth();
+  // const session = await auth();
   const response = NextResponse.next();
 
   return response;

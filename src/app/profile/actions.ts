@@ -7,17 +7,18 @@ import { auth } from '@/auth';
 import { errors } from '@/lib/error';
 import { z } from 'zod';
 import { familyFormSchema } from './schema';
+import { errorJson, successJson, writeJson } from '@/lib/response';
 
 export async function createFamilyAction(values: z.infer<typeof familyFormSchema>) {
   const session = await auth();
   if (!session?.user) {
-    return errors.unauthorized;
+    return errorJson(errors.unauthorized);
   }
 
   const parse = familyFormSchema.safeParse(values);
 
   if (!parse.success) {
-    return { message: 'Failed to create family!' };
+    return successJson('Failed to create family');
   }
 
   const data = parse.data;
@@ -37,12 +38,11 @@ export async function createFamilyAction(values: z.infer<typeof familyFormSchema
         return;
       }
       const familyId = newFamilies[0].id;
-      await tx.update(users).set({ familyId });
+      tx.update(users).set({ familyId });
     });
-
     revalidatePath('/profile');
-    return { message: `Created family: ${data.name}` };
+    return successJson(`Created family: ${data.name}`);
   } catch (e) {
-    return { message: 'Failed to create family' };
+    return errorJson('Failed to create family');
   }
 }
