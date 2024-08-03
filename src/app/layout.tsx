@@ -3,6 +3,7 @@ import type { Metadata } from 'next';
 import { Inter } from 'next/font/google';
 import { cn } from '@/lib/utils';
 import SiteHeader from '@/components/site-header';
+import { Toaster } from '@/components/ui/toaster';
 
 const inter = Inter({ subsets: ['latin'] });
 
@@ -20,6 +21,7 @@ export default function RootLayout({
     <html lang="en" className="dark">
       <body className={cn('min-h-screen bg-background font-sans antialiased', inter.className)}>
         <SiteHeader />
+        <Toaster />
         <main className="container max-w-screen-2xl py-4">{children}</main>
       </body>
     </html>

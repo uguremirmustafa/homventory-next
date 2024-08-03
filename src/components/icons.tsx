@@ -9,6 +9,7 @@ const icons = {
   sunny: 'line-md:sunny-filled-loop',
   night: 'line-md:sunny-filled-loop-to-moon-filled-loop-transition',
   homeCog: 'tabler:home-cog',
+  home: 'tabler:home',
   back: 'tabler:arrow-back-up',
   camera: 'bi:camera',
   cameraEdit: 'fluent:camera-edit-20-regular',
@@ -32,6 +33,7 @@ const icons = {
   skip: 'fluent:skip-forward-tab-20-regular',
   party: 'emojione-v1:party-popper',
   loading: 'line-md:loading-loop',
+  mail: 'hugeicons:mail-send-02',
 } as const;
 
 interface IProps extends Omit<IconProps, 'icon'> {

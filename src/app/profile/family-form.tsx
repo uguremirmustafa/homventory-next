@@ -4,6 +4,7 @@ import { z } from 'zod';
 import { Button } from '@/components/ui/button';
 import {
   Dialog,
+  DialogClose,
   DialogContent,
   DialogDescription,
   DialogFooter,
@@ -20,42 +21,86 @@ import {
   FormLabel,
   FormMessage,
 } from '@/components/ui/form';
+import { useToast } from '@/components/ui/use-toast';
+
 import { Input } from '@/components/ui/input';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { createFamilyAction } from './actions';
-import { familyFormSchema } from './schema';
-import { useTransition } from 'react';
+import { createFamilyAndConnectToUserAction, updateFamilyAction } from './actions';
+import { familyFormSchema, FamilyFormValues } from './schema';
+import { useState, useTransition } from 'react';
+import Icon from '@/components/icons';
 
-export function FamilyForm() {
+interface IProps {
+  initialValues?: FamilyFormValues;
+}
+
+export function FamilyForm(props: IProps) {
+  const { initialValues } = props;
+  const isEditing = Boolean(initialValues);
+  const [open, setOpen] = useState(false);
+
+  const { toast } = useToast();
   const [isPending, startTransition] = useTransition();
-  const form = useForm<z.infer<typeof familyFormSchema>>({
+  const form = useForm<FamilyFormValues>({
     resolver: zodResolver(familyFormSchema),
-    defaultValues: {
+    defaultValues: initialValues ?? {
       name: '',
       description: '',
     },
   });
 
-  function onSubmit(values: z.infer<typeof familyFormSchema>) {
+  function onSubmit(values: FamilyFormValues) {
     startTransition(async () => {
-      const res = await createFamilyAction(values);
-      form.setError('root', { message: res.message });
+      form.clearErrors();
+      if (isEditing) {
+        const res = await updateFamilyAction(values);
+        if (!res?.success) {
+          form.setError('root', { message: res.message });
+        } else {
+          toast({
+            title: 'Success!',
+            description: 'Family is updated successfully.',
+          });
+          setOpen(false);
+        }
+      } else {
+        const res = await createFamilyAndConnectToUserAction(values);
+        if (!res?.success) {
+          form.setError('root', { message: res.message });
+        } else {
+          toast({
+            title: 'Success!',
+            description: 'Family is created successfully.',
+          });
+          setOpen(false);
+        }
+      }
     });
   }
+
+  const formTitle = isEditing ? 'Edit your family' : 'Create your family!';
+  const formDescription = isEditing
+    ? 'Edit your family name and description'
+    : 'Create your family and start inviting family members!';
+
+  const buttonIcon = isEditing ? (
+    <Icon icon="edit" className="ml-2" />
+  ) : (
+    <Icon icon="personAdd" className="ml-2" />
+  );
+
   return (
-    <Dialog>
+    <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
         <Button size="sm" variant="outline">
-          Create your family!
+          {formTitle} {buttonIcon}
         </Button>
       </DialogTrigger>
       <DialogContent className="sm:max-w-[425px]">
         <DialogHeader>
-          <DialogTitle>Create your family</DialogTitle>
-          <DialogDescription>
-            Create your family and start inviting family members!
-          </DialogDescription>
+          <DialogTitle>{formTitle}</DialogTitle>
+          <DialogDescription>{formDescription}</DialogDescription>
         </DialogHeader>
         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
           <Form {...form}>
@@ -92,6 +137,9 @@ export function FamilyForm() {
               )}
             />
           </Form>
+          {form.formState.errors.root && (
+            <div className="text-red-500 text-sm">{form.formState.errors.root.message}</div>
+          )}
           <DialogFooter>
             <Button onClick={() => form.handleSubmit(onSubmit)} disabled={isPending}>
               Submit

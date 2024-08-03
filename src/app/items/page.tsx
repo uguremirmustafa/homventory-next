@@ -1,15 +1,8 @@
 import { auth } from '@/auth';
 import PageTitle from '@/components/page-title';
-import {
-  NavigationMenu,
-  NavigationMenuLink,
-  navigationMenuTriggerStyle,
-} from '@/components/ui/navigation-menu';
 import db from '@/db';
 import { item, itemType } from '@/db/schema';
-import { NavigationMenuContent, NavigationMenuItem } from '@radix-ui/react-navigation-menu';
 import { eq, isNull } from 'drizzle-orm';
-import Link from 'next/link';
 import { Nav } from './components/nav';
 
 export default async function ItemsPage() {
@@ -27,9 +20,9 @@ export default async function ItemsPage() {
   return (
     <div>
       <PageTitle primary="Inventory" />
-      <div className="border mt-4 rounded">
+      <div className="border mt-4 rounded w-auto">
         <Nav
-          isCollapsed={false}
+          isCollapsed={true}
           links={itemTypes.map((x) => ({
             icon: x.icon,
             title: x.name,

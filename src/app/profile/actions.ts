@@ -6,25 +6,30 @@ import { revalidatePath } from 'next/cache';
 import { auth } from '@/auth';
 import { errors } from '@/lib/error';
 import { z } from 'zod';
-import { familyFormSchema } from './schema';
-import { errorJson, successJson, writeJson } from '@/lib/response';
+import { familyFormSchema, FamilyFormValues } from './schema';
+import { errorJson, successJson } from '@/lib/response';
+import { eq } from 'drizzle-orm';
 
-export async function createFamilyAction(values: z.infer<typeof familyFormSchema>) {
+export async function createFamilyAndConnectToUserAction(values: FamilyFormValues) {
   const session = await auth();
   if (!session?.user) {
-    return errorJson(errors.unauthorized);
+    return errorJson({ message: errors.unauthorized });
   }
 
   const parse = familyFormSchema.safeParse(values);
 
   if (!parse.success) {
-    return successJson('Failed to create family');
+    return errorJson({ message: 'Failed to create family' });
   }
 
   const data = parse.data;
 
+  if (session.user.familyId) {
+    return errorJson({ message: 'You already have a family' });
+  }
+
   try {
-    await db.transaction(async (tx) => {
+    const newFamilyID = await db.transaction(async (tx) => {
       const newFamilies = await tx
         .insert(family)
         .values({
@@ -37,12 +42,39 @@ export async function createFamilyAction(values: z.infer<typeof familyFormSchema
         tx.rollback();
         return;
       }
+
       const familyId = newFamilies[0].id;
-      tx.update(users).set({ familyId });
+      await tx
+        .update(users)
+        .set({ familyId })
+        .where(eq(users.email, session.user.email ?? ''));
+      return familyId;
     });
     revalidatePath('/profile');
-    return successJson(`Created family: ${data.name}`);
+    return successJson({ message: `Created family: ${data.name}`, data: newFamilyID });
   } catch (e) {
-    return errorJson('Failed to create family');
+    return errorJson({ message: 'Failed to create family' });
+  }
+}
+
+export async function updateFamilyAction(values: FamilyFormValues) {
+  const session = await auth();
+  if (!session?.user) {
+    return errorJson({ message: errors.unauthorized });
+  }
+  const parse = familyFormSchema.safeParse(values);
+  if (!parse.success) {
+    return errorJson({ message: 'Failed to create family' });
+  }
+  if (!session.user.familyId) {
+    return errorJson({ message: 'Family not found' });
+  }
+  const { description, name } = parse.data;
+  try {
+    await db.update(family).set({ name, description }).where(eq(family.id, session.user.familyId));
+    revalidatePath('/profile');
+    return successJson({ message: `Updated family: ${name}` });
+  } catch (error) {
+    return errorJson({ message: 'Failed to update family' });
   }
 }

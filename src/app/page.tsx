@@ -1,8 +1,13 @@
+import { auth } from '@/auth';
+import PageTitle from '@/components/page-title';
+
 export default async function Home() {
+  const session = await auth();
+
   return (
     <main>
-      {/* <pre>{JSON.stringify(session, null, 2)}</pre> */}
-      <h2 className="text-3xl font-bold tracking-tight">Dashboard</h2>
+      <PageTitle primary="Dashboard" />
+      <p>Welcome to your home inventory!</p>
     </main>
   );
 }

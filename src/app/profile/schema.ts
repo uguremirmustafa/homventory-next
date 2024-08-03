@@ -8,3 +8,5 @@ export const familyFormSchema = z.object({
     message: 'Family description is too short!',
   }),
 });
+
+export type FamilyFormValues = z.infer<typeof familyFormSchema>;

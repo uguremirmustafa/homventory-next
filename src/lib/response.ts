@@ -1,14 +1,22 @@
-export function writeJson(message: string, success: boolean) {
+interface JsonRes<T = unknown> {
+  message: string;
+  success: boolean;
+  data?: T;
+  dataList?: T[];
+}
+export function writeJson({ message, success, data, dataList }: JsonRes) {
   return {
     message,
     success,
+    data,
+    dataList,
   };
 }
 
-export function errorJson(message: string) {
-  return writeJson(message, false);
+export function errorJson(data: Omit<JsonRes, 'success'>) {
+  return writeJson({ ...data, success: false });
 }
 
-export function successJson(message: string) {
-  return writeJson(message, true);
+export function successJson(data: Omit<JsonRes, 'success'>) {
+  return writeJson({ ...data, success: true });
 }
