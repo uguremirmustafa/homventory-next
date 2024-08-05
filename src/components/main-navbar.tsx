@@ -9,7 +9,7 @@ export default function MainNavbar() {
 
   return (
     <div className="mr-4 flex">
-      <Link href="/" className="hidden md:flex mr-6 items-center space-x-2">
+      <Link href="/" className="flex mr-6 items-center space-x-2">
         <Image src="/logo-dark.svg" className="h-10" alt="logo" width={60} height={40} />
       </Link>
       <nav className="flex items-center gap-4 text-sm lg:gap-6">

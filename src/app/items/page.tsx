@@ -5,6 +5,7 @@ import { Icon as IconComponent } from '@iconify/react';
 import { Button } from '@/components/ui/button';
 import Link from 'next/link';
 import Icon from '@/components/icons';
+import { Separator } from '@/components/ui/separator';
 
 export default async function ItemsPage() {
   const session = await auth();
@@ -27,10 +28,11 @@ export default async function ItemsPage() {
         <h3 className="mb-3 font-bold text-xl">Categories</h3>
         <p className="text-muted-foreground">Select a category to see the items</p>
       </div>
+      <Separator className="my-4" />
       <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-4">
         {itemTypes.map((x) => {
           return (
-            <Button asChild variant="outline">
+            <Button key={x.id} asChild variant="outline">
               <Link
                 href={`/items/${x.id}`}
                 className="col-span-1 h-full aspect-square flex flex-col gap-2"

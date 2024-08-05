@@ -35,7 +35,7 @@ function ItemTypeSelector(props: IProps): JSX.Element {
                     <RadioGroupItem id={val} value={val} className="peer sr-only" />
                     <Label
                       htmlFor={val}
-                      className="w-32 aspect-square flex flex-col items-center justify-between rounded-md border-2 border-muted bg-popover p-4 hover:bg-accent hover:text-accent-foreground peer-data-[state=checked]:border-primary [&:has([data-state=checked])]:border-primary cursor-pointer peer-data-[state=checked]:bg-slate-700"
+                      className="w-32 aspect-square flex flex-col items-center justify-between rounded-md border-2 border-muted bg-popover p-4 hover:bg-accent hover:text-accent-foreground peer-data-[state=checked]:border-primary [&:has([data-state=checked])]:border-primary cursor-pointer peer-data-[state=checked]:bg-secondary"
                     >
                       <IconComponent icon={x.icon} fontSize="36" />
                       <span className="text-sm text-center">{x.name}</span>

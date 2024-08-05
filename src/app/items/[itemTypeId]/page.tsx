@@ -12,7 +12,7 @@ export default async function ItemsInCategory({ params }: { params: { itemTypeId
   return (
     <div>
       <ItemBreadcrumb itemTypeId={Number(itemTypeId)} />
-      <pre>{JSON.stringify(items, null, 2)}</pre>
+      <pre>{JSON.stringify(items.length, null, 2)}</pre>
     </div>
   );
 }

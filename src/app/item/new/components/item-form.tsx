@@ -104,7 +104,7 @@ function ItemForm(props: IProps): JSX.Element {
     <div className="grid grid-cols-4 gap-4">
       <FormProvider {...form}>
         <Form {...form}>
-          <div className="col-span-3">
+          <div className="col-span-4 lg:col-span-3">
             <Card>
               <CardHeader>
                 <CardTitle className="text-lg">New Item Form</CardTitle>
@@ -142,7 +142,7 @@ function ItemForm(props: IProps): JSX.Element {
               </CardFooter>
             </Card>
           </div>
-          <div className="col-span-1">
+          <div className="hidden md:block col-span-1">
             <FormSummary itemTypes={itemTypes} />
           </div>
         </Form>
