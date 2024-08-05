@@ -3,6 +3,7 @@ import { Icon as IconComponent, IconProps } from '@iconify/react';
 const icons = {
   hamburger: 'material-symbols:menu-rounded',
   logout: 'line-md:logout',
+  add: 'material-symbols:add',
   settings: 'solar:settings-outline',
   dashboard: 'ri:dashboard-line',
   personAdd: 'line-md:account-add',
@@ -17,7 +18,7 @@ const icons = {
   close: 'ic:round-close',
   cameraIris: 'mdi:camera-iris',
   removeImg: 'mdi:image-remove-outline',
-  upload: 'line-md:upload-outline-loop',
+  upload: 'material-symbols:upload',
   account: 'line-md:account',
   email: 'line-md:email',
   editImg: 'mdi:image-edit-outline',
@@ -28,12 +29,17 @@ const icons = {
   category: 'bx:category-alt',
   items: 'line-md:list',
   company: 'mdi:company',
-  chevronRight: 'line-md:chevron-right',
-  chevronLeft: 'line-md:chevron-left',
+  chevronRight: 'mdi:chevron-right',
+  chevronLeft: 'mdi:chevron-left',
+  chevronDown: 'mdi:chevron-down',
   skip: 'fluent:skip-forward-tab-20-regular',
   party: 'emojione-v1:party-popper',
   loading: 'line-md:loading-loop',
   mail: 'hugeicons:mail-send-02',
+  slash: 'tabler:slash',
+  resetImage: 'material-symbols:reset-image',
+  check: 'material-symbols:check',
+  image: 'material-symbols:image-outline',
 } as const;
 
 interface IProps extends Omit<IconProps, 'icon'> {

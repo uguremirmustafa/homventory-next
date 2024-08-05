@@ -4,7 +4,7 @@ interface JsonRes<T = unknown> {
   data?: T;
   dataList?: T[];
 }
-export function writeJson({ message, success, data, dataList }: JsonRes) {
+export function writeJson<T = unknown>({ message, success, data, dataList }: JsonRes<T>) {
   return {
     message,
     success,
@@ -13,10 +13,10 @@ export function writeJson({ message, success, data, dataList }: JsonRes) {
   };
 }
 
-export function errorJson(data: Omit<JsonRes, 'success'>) {
-  return writeJson({ ...data, success: false });
+export function errorJson<T = undefined>(data: Omit<JsonRes<T>, 'success'>) {
+  return writeJson<T>({ ...data, success: false });
 }
 
-export function successJson(data: Omit<JsonRes, 'success'>) {
-  return writeJson({ ...data, success: true });
+export function successJson<T = undefined>(data: Omit<JsonRes<T>, 'success'>) {
+  return writeJson<T>({ ...data, success: true });
 }
