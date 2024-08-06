@@ -1,3 +1,4 @@
+/* eslint-disable @next/next/no-img-element */
 import Icon from '@/components/icons';
 import { Button } from '@/components/ui/button';
 import { useState } from 'react';
@@ -12,6 +13,7 @@ import {
   FormLabel,
   FormMessage,
 } from '@/components/ui/form';
+import { cn } from '@/lib/utils';
 
 const imagePreferences = ['webcam', 'upload'] as const;
 
@@ -22,6 +24,7 @@ function ImageStep(): JSX.Element {
   const form = useFormContext<ItemFormValues>();
   function onImageUpload(imgUrl: string) {
     form.setValue('image', imgUrl);
+    form.clearErrors('image');
     setPreference(undefined);
   }
 
@@ -30,7 +33,11 @@ function ImageStep(): JSX.Element {
     <div>
       {img ? (
         <div className="mb-3">
-          <img src={img} className="rounded ring-2 outline-offset-2 mb-3 max-h-96 object-contain" />
+          <img
+            src={img}
+            alt="img"
+            className="rounded ring-2 outline-offset-2 mb-3 max-h-96 object-contain"
+          />
           <Button
             type="button"
             variant="ghost"
@@ -48,6 +55,11 @@ function ImageStep(): JSX.Element {
           <ImageUpload onSuccess={onImageUpload} />
           <TakePicture onSuccess={onImageUpload} />
         </div>
+      )}
+      {form.formState.errors.image && (
+        <p className={cn('text-sm font-medium text-destructive mt-2')}>
+          {form.formState.errors.image.message}
+        </p>
       )}
     </div>
   );

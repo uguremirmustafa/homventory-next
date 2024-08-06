@@ -6,8 +6,14 @@ import Image from 'next/image';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { format } from 'date-fns';
 import Link from 'next/link';
+import { auth } from '@/auth';
+import { redirect } from 'next/navigation';
 
 export default async function ItemPage({ params }: { params: { id: string } }) {
+  const session = await auth();
+  if (!session?.user) {
+    redirect(`/api/auth/signin?callbackUrl=/item/${params.id}`);
+  }
   const items = await db
     .select({
       id: item.id,

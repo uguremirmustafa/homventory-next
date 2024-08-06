@@ -37,7 +37,7 @@ function ItemForm(props: IProps): JSX.Element {
   const form = useForm<ItemFormValues>({
     defaultValues: { description: '', name: '', itemTypeId: '', image: '' },
     resolver: zodResolver(itemFormSchema),
-    mode: 'onTouched',
+    mode: 'all',
   });
   const [step, setStep] = useState<ItemFormStep>('Category Selection');
   const [isPending, startTransition] = useTransition();
@@ -123,13 +123,25 @@ function ItemForm(props: IProps): JSX.Element {
               </CardContent>
               <CardFooter className="flex justify-end gap-5">
                 {!isOnFirstStep && (
-                  <Button variant="outline" size="sm" type="button" onClick={() => prev()}>
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    type="button"
+                    onClick={() => prev()}
+                    disabled={isPending}
+                  >
                     <Icon icon="chevronLeft" className="mr-2" />
                     <span className="mr-1">Previous</span>
                   </Button>
                 )}
                 {isOnLastStep && (
-                  <Button size="sm" variant="default" type="submit" form="item-form">
+                  <Button
+                    size="sm"
+                    variant="default"
+                    type="submit"
+                    form="item-form"
+                    disabled={isPending}
+                  >
                     <span className="ml-1">Submit</span>
                     <Icon icon="check" className="ml-2" />
                   </Button>

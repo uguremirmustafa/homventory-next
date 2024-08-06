@@ -6,9 +6,13 @@ import { Button } from '@/components/ui/button';
 import Link from 'next/link';
 import Icon from '@/components/icons';
 import { Separator } from '@/components/ui/separator';
+import { redirect } from 'next/navigation';
 
 export default async function ItemsPage() {
   const session = await auth();
+  if (!session?.user) {
+    redirect('/api/auth/signin?callbackUrl=/items');
+  }
 
   const itemTypes = await getItemTypes();
 

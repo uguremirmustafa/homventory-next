@@ -36,6 +36,7 @@ function ImageUpload(props: IProps): JSX.Element {
           onSuccess(res.data);
         } else {
           toast({ title: 'Failed', description: res.message });
+          setFile(undefined);
         }
       } else {
         toast({ title: 'Failed', description: 'No file found to upload' });
@@ -62,7 +63,13 @@ function ImageUpload(props: IProps): JSX.Element {
           const f = files && files.length > 0 ? files[0] : null;
           if (f) {
             if (f.size > 1000000) {
-              toast({ title: 'Failed', description: 'File is too big' });
+              toast({
+                title: 'Failed',
+                description: 'File is too big',
+                variant: 'destructive',
+                duration: 1500,
+              });
+              setFile(undefined);
             } else {
               setFile(f);
             }

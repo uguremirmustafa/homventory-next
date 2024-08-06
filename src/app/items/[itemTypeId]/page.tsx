@@ -1,13 +1,17 @@
 import { auth } from '@/auth';
 
-import { getItemsInType, getItemTypes } from '../queries';
+import { getItemsInType } from '../queries';
 import ItemBreadcrumb from './components/breadcrumb';
 import ItemCard from './components/item-card';
 import PageTitle from '@/components/page-title';
 import { Separator } from '@/components/ui/separator';
+import { redirect } from 'next/navigation';
 
 export default async function ItemsInCategory({ params }: { params: { itemTypeId: string } }) {
   const session = await auth();
+  if (!session?.user) {
+    redirect(`/api/auth/signin?callbackUrl=/items/${params.itemTypeId}`);
+  }
   const { itemTypeId } = params;
   const familyId = session?.user.familyId ?? 0;
   const items = await getItemsInType({ familyId, itemTypeId: Number(itemTypeId) });

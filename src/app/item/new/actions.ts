@@ -11,7 +11,7 @@ import { item, itemImage } from '@/db/schema';
 import { revalidatePath } from 'next/cache';
 
 const MAX_FILE_SIZE = 1 * 1024 * 1024; // 1MB
-const BASE_URL = process.env.BASE_URL || 'http://localhost:3000';
+const BASE_URL = process.env.BASE_URL || 'http://localhost:3002';
 
 export async function uploadImageAction(buffer: Uint8Array) {
   const session = await auth();
