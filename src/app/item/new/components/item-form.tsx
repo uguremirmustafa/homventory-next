@@ -27,8 +27,8 @@ interface IProps {
   itemTypes: ItemType[];
 }
 
-const steps = ['Category Selection', 'Image Upload', 'General Details'] as const;
-export type ItemFormStep = (typeof steps)[number];
+export const itemFormSteps = ['Category Selection', 'Image Upload', 'General Details'] as const;
+export type ItemFormStep = (typeof itemFormSteps)[number];
 
 function ItemForm(props: IProps): JSX.Element {
   const { itemTypes } = props;
@@ -43,18 +43,19 @@ function ItemForm(props: IProps): JSX.Element {
   const [isPending, startTransition] = useTransition();
 
   function prev() {
-    const stepIndex = steps.indexOf(step);
+    const stepIndex = itemFormSteps.indexOf(step);
     const newIndex = stepIndex === 0 ? 0 : stepIndex - 1;
 
-    setStep(steps[newIndex]);
+    setStep(itemFormSteps[newIndex]);
   }
   async function next() {
     const passed = await validateStep(step);
     if (!passed) return step;
     setStep((step) => {
-      const stepIndex = steps.indexOf(step);
-      const newIndex = stepIndex === steps.length - 1 ? steps.length - 1 : stepIndex + 1;
-      return steps[newIndex];
+      const stepIndex = itemFormSteps.indexOf(step);
+      const newIndex =
+        stepIndex === itemFormSteps.length - 1 ? itemFormSteps.length - 1 : stepIndex + 1;
+      return itemFormSteps[newIndex];
     });
   }
 
@@ -76,8 +77,8 @@ function ItemForm(props: IProps): JSX.Element {
     return passed;
   }
 
-  const isOnFirstStep = step === steps[0];
-  const isOnLastStep = step === steps[steps.length - 1];
+  const isOnFirstStep = step === itemFormSteps[0];
+  const isOnLastStep = step === itemFormSteps[itemFormSteps.length - 1];
 
   async function onSubmit(data: ItemFormValues) {
     if (isOnLastStep) {
@@ -143,7 +144,7 @@ function ItemForm(props: IProps): JSX.Element {
             </Card>
           </div>
           <div className="hidden md:block col-span-1">
-            <FormSummary itemTypes={itemTypes} />
+            <FormSummary itemTypes={itemTypes} step={step} />
           </div>
         </Form>
       </FormProvider>

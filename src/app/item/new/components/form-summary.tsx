@@ -4,13 +4,16 @@ import { ItemFormValues } from '../schema';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { ItemType } from '@/app/items/queries';
 import Icon from '@/components/icons';
+import { ItemFormStep } from './item-form';
 
 interface IProps {
   itemTypes: ItemType[];
+  step: ItemFormStep;
 }
 
 function FormSummary(props: IProps): JSX.Element {
-  const { itemTypes } = props;
+  const { itemTypes, step } = props;
+
   const { watch } = useFormContext<ItemFormValues>();
   const itemTypeId = watch('itemTypeId');
   // @ts-ignore

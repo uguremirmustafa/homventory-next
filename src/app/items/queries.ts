@@ -33,3 +33,5 @@ export async function getItemsInType(params: GetItemsInTypeParams) {
       )
     );
 }
+
+export type Item = Awaited<ReturnType<typeof getItemsInType>>[number];
