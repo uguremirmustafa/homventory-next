@@ -22,7 +22,7 @@ export default function RootLayout({
       <body className={cn('min-h-screen bg-background font-sans antialiased', inter.className)}>
         <SiteHeader />
         <Toaster />
-        <main className="container max-w-screen-2xl py-4">{children}</main>
+        <main className="container max-w-screen-xl py-4">{children}</main>
       </body>
     </html>
   );

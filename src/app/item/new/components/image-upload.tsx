@@ -29,13 +29,18 @@ function ImageUpload(props: IProps): JSX.Element {
       if (file) {
         const arrayBuffer = await file.arrayBuffer();
         const buffer = await new Uint8Array(arrayBuffer);
-        const res = await uploadImageAction(buffer);
-        if (res.success && res.data) {
-          toast({ title: 'Success', description: res.message });
-          setFile(undefined);
-          onSuccess(res.data);
-        } else {
-          toast({ title: 'Failed', description: res.message });
+        try {
+          const res = await uploadImageAction(buffer);
+          if (res.success && res.data) {
+            toast({ title: 'Success', description: res.message });
+            setFile(undefined);
+            onSuccess(res.data);
+          } else {
+            toast({ title: 'Failed', description: res.message });
+            setFile(undefined);
+          }
+        } catch (error) {
+          toast({ title: 'Failed', description: 'Something went wrong while uploading the file!' });
           setFile(undefined);
         }
       } else {
@@ -57,7 +62,7 @@ function ImageUpload(props: IProps): JSX.Element {
         id="picture"
         type="file"
         className="sr-only hidden"
-        accept=".png,.jpeg,.jpg"
+        accept=".png,.jpeg,.jpg,.webp"
         onChange={(e) => {
           const files = e.target.files;
           const f = files && files.length > 0 ? files[0] : null;

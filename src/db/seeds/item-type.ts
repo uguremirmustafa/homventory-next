@@ -28,7 +28,7 @@ export const itemTypes: InferInsertModel<typeof itemType>[] = [
   },
   {
     id: 5,
-    name: 'cooking utensils',
+    name: 'cooking utensils and kitchen',
     description: 'Spoons, pots and forks. Dont forget the jars.',
     icon: 'hugeicons:kitchen-utensils',
   },
@@ -43,5 +43,17 @@ export const itemTypes: InferInsertModel<typeof itemType>[] = [
     name: 'stationery and books',
     description: 'Pencils, A4 papers, books and notebooks goes here.',
     icon: 'lucide:notebook-pen',
+  },
+  {
+    id: 8,
+    name: 'garage',
+    description: 'Spare wheels, car cover and other stuff that is used in garage...',
+    icon: 'game-icons:home-garage',
+  },
+  {
+    id: 9,
+    name: 'vacation and weekend',
+    description: 'Luggages, beach ball, camping chair and portable barbaeque...',
+    icon: 'emojione-monotone:camping',
   },
 ];

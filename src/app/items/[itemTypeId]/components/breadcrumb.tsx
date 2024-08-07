@@ -13,6 +13,8 @@ import {
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
 import Link from 'next/link';
+import { Icon as IconComponent } from '@iconify/react';
+
 import Icon from '@/components/icons';
 import { getItemTypes } from '../../queries';
 export default async function ItemBreadcrumb({ itemTypeId }: { itemTypeId: number }) {
@@ -37,7 +39,9 @@ export default async function ItemBreadcrumb({ itemTypeId }: { itemTypeId: numbe
             <DropdownMenuContent align="start">
               {itemTypes.map((x) => (
                 <DropdownMenuItem asChild key={x.id}>
-                  <Link href={`/items/${x.id}`}>{x.name}</Link>
+                  <Link href={`/items/${x.id}`} className="flex gap-2 items-center">
+                    <IconComponent icon={x.icon} /> {x.name}
+                  </Link>
                 </DropdownMenuItem>
               ))}
             </DropdownMenuContent>

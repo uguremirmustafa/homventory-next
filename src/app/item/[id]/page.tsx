@@ -8,41 +8,35 @@ import { format } from 'date-fns';
 import Link from 'next/link';
 import { auth } from '@/auth';
 import { redirect } from 'next/navigation';
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from '@/components/ui/dropdown-menu';
+import { Button } from '@/components/ui/button';
+import Icon from '@/components/icons';
+import { getItemWithDetails } from './queries';
 
 export default async function ItemPage({ params }: { params: { id: string } }) {
   const session = await auth();
   if (!session?.user) {
     redirect(`/api/auth/signin?callbackUrl=/item/${params.id}`);
   }
-  const items = await db
-    .select({
-      id: item.id,
-      name: item.name,
-      description: item.description,
-      url: itemImage.url,
-      typeId: item.itemTypeID,
-      typeName: itemType.name,
-      typeIcon: itemType.icon,
-      owner: users.name,
-      ownerAvatar: users.image,
-      createdAt: item.createdAt,
-    })
-    .from(item)
-    .innerJoin(itemImage, eq(itemImage.itemId, item.id))
-    .innerJoin(itemType, eq(itemType.id, item.itemTypeID))
-    .innerJoin(users, eq(users.id, item.ownerID))
-    .where(eq(item.id, Number(params.id)));
+  const item = await getItemWithDetails(Number(params.id));
 
-  if (items.length !== 1) {
+  if (!item) {
     return <div>item not found</div>;
   }
 
   const { name, description, id, typeIcon, typeId, typeName, url, owner, ownerAvatar, createdAt } =
-    items[0];
+    item;
   return (
-    <div className="max-w-[400px]">
+    <div className="max-w-[500px]">
       <h1 className="text-xl md:text-2xl font-extrabold">{name}</h1>
-      <Image className="rounded my-4" height={400} width={400} src={url ?? ''} alt={name} />
+      <Image className="rounded my-4" height={500} width={500} src={url ?? ''} alt={name} />
       <div className="flex justify-between border-b pb-2 mb-3">
         <Link
           href={`/items/${typeId}`}
@@ -53,12 +47,33 @@ export default async function ItemPage({ params }: { params: { id: string } }) {
         </Link>
         <p className="text-sm py-1">{format(new Date(createdAt), 'dd MMM yyyy')}</p>
       </div>
-      <div className="flex gap-2 items-center">
-        <Avatar className="h-8 w-8">
-          <AvatarImage src={ownerAvatar ?? ''} alt={owner ?? ''} />
-          <AvatarFallback>{(owner ?? ' ').charAt(0)}</AvatarFallback>
-        </Avatar>
-        <p className="text-sm font-medium leading-none">{owner}</p>
+      <div className="flex justify-between">
+        <div className="flex gap-2 items-center">
+          <Avatar className="h-8 w-8">
+            <AvatarImage src={ownerAvatar ?? ''} alt={owner ?? ''} />
+            <AvatarFallback>{(owner ?? ' ').charAt(0)}</AvatarFallback>
+          </Avatar>
+          <p className="text-sm font-medium leading-none">{owner}</p>
+        </div>
+        <div>
+          <DropdownMenu>
+            <DropdownMenuTrigger>
+              <Button variant="ghost" size="icon">
+                <Icon icon="verticalDots" />
+              </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent className="w-56">
+              <DropdownMenuLabel>Actions</DropdownMenuLabel>
+              <DropdownMenuSeparator />
+              <DropdownMenuItem className="flex justify-between" asChild>
+                <Link href={`/item/${id}/edit`}>
+                  <span>Edit item</span>
+                  <Icon icon="edit" />
+                </Link>
+              </DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
+        </div>
       </div>
       <p className="text-muted-foreground mt-4">{description}</p>
     </div>

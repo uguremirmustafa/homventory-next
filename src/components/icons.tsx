@@ -23,7 +23,7 @@ const icons = {
   email: 'line-md:email',
   editImg: 'mdi:image-edit-outline',
   edit: 'line-md:edit',
-  verticalDots: 'mdi:dots-vertical',
+  verticalDots: 'heroicons-solid:dots-vertical',
   horizontalDots: 'mdi:dots-horizontal',
   delete: 'material-symbols:delete-outline',
   category: 'bx:category-alt',

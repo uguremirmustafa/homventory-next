@@ -1,14 +1,15 @@
 import { eq } from 'drizzle-orm';
 import db from '../index';
-import { family, item, itemType, users } from '../schema';
+import { family, item, itemImage, itemType, users } from '../schema';
 import { itemTypes } from './item-type';
 import { items } from './item';
 
 const defaultUserEmail = 'uguremirmustafa@gmail.com';
 
 const main = async () => {
-  await db.delete(itemType);
+  await db.delete(itemImage);
   await db.delete(item);
+  await db.delete(itemType);
   await db.insert(itemType).values(itemTypes);
   await db.insert(family).values({ name: "Ugur's family", description: 'My lovely family' });
 

@@ -20,22 +20,24 @@ import {
   CardTitle,
 } from '@/components/ui/card';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { createItemAction } from '../actions';
+import { createItemAction, updateItemAction } from '../actions';
 import { useRouter } from 'next/navigation';
 
 interface IProps {
   itemTypes: ItemType[];
+  initialValues?: ItemFormValues;
+  id?: number;
 }
 
 export const itemFormSteps = ['Category Selection', 'Image Upload', 'General Details'] as const;
 export type ItemFormStep = (typeof itemFormSteps)[number];
 
 function ItemForm(props: IProps): JSX.Element {
-  const { itemTypes } = props;
+  const { itemTypes, initialValues, id } = props;
   const router = useRouter();
 
   const form = useForm<ItemFormValues>({
-    defaultValues: { description: '', name: '', itemTypeId: '', image: '' },
+    defaultValues: initialValues ?? { description: '', name: '', itemTypeId: '', image: '' },
     resolver: zodResolver(itemFormSchema),
     mode: 'all',
   });
@@ -86,16 +88,30 @@ function ItemForm(props: IProps): JSX.Element {
       if (!passed) return;
 
       startTransition(async () => {
-        const res = await createItemAction(data);
-        if (!res?.success) {
-          form.setError('root', { message: res.message });
+        if (id) {
+          const res = await updateItemAction(data, id);
+          if (!res?.success) {
+            form.setError('root', { message: res.message });
+          } else {
+            const path = `/item/${res.data?.id}`;
+            router.push(path);
+            toast({
+              title: 'Success!',
+              description: res.message,
+            });
+          }
         } else {
-          const path = `/item/${res.data?.id}`;
-          router.push(path);
-          toast({
-            title: 'Success!',
-            description: res.message,
-          });
+          const res = await createItemAction(data);
+          if (!res?.success) {
+            form.setError('root', { message: res.message });
+          } else {
+            const path = `/item/${res.data?.id}`;
+            router.push(path);
+            toast({
+              title: 'Success!',
+              description: res.message,
+            });
+          }
         }
       });
     }
@@ -108,7 +124,7 @@ function ItemForm(props: IProps): JSX.Element {
           <div className="col-span-4 lg:col-span-3">
             <Card>
               <CardHeader>
-                <CardTitle className="text-lg">New Item Form</CardTitle>
+                <CardTitle className="text-lg">{id ? 'Edit Item Form' : 'New Item Form'}</CardTitle>
                 <CardDescription className="border-b pb-3">{step}</CardDescription>
               </CardHeader>
               <CardContent>
