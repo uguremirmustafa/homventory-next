@@ -22,7 +22,7 @@ CREATE TABLE IF NOT EXISTS "authenticator" (
 	"credentialDeviceType" text NOT NULL,
 	"credentialBackedUp" boolean NOT NULL,
 	"transports" text,
-	CONSTRAINT "authenticator_userId_credentialID_pk" PRIMARY KEY("userId","credentialID"),
+	CONSTRAINT "authenticator_userId_credentialID_pk" PRIMARY KEY("credentialID","userId"),
 	CONSTRAINT "authenticator_credentialID_unique" UNIQUE("credentialID")
 );
 --> statement-breakpoint
@@ -37,7 +37,8 @@ CREATE TABLE IF NOT EXISTS "family" (
 --> statement-breakpoint
 CREATE TABLE IF NOT EXISTS "item" (
 	"id" serial PRIMARY KEY NOT NULL,
-	"name" varchar(511) NOT NULL,
+	"name" varchar(255) NOT NULL,
+	"description" varchar(511) NOT NULL,
 	"owner_id" text,
 	"family_id" integer,
 	"item_type_id" integer,
@@ -46,9 +47,19 @@ CREATE TABLE IF NOT EXISTS "item" (
 	"deleted_at" timestamp
 );
 --> statement-breakpoint
+CREATE TABLE IF NOT EXISTS "item_image" (
+	"id" serial PRIMARY KEY NOT NULL,
+	"item_id" integer,
+	"url" varchar NOT NULL,
+	"created_at" timestamp DEFAULT now() NOT NULL,
+	"updated_at" timestamp DEFAULT now() NOT NULL,
+	"deleted_at" timestamp
+);
+--> statement-breakpoint
 CREATE TABLE IF NOT EXISTS "item_type" (
 	"id" serial PRIMARY KEY NOT NULL,
-	"name" varchar(511) NOT NULL,
+	"name" varchar(255) NOT NULL,
+	"description" varchar(511) NOT NULL,
 	"icon_class" varchar(255) NOT NULL,
 	"created_at" timestamp DEFAULT now() NOT NULL,
 	"updated_at" timestamp DEFAULT now() NOT NULL,
@@ -67,7 +78,8 @@ CREATE TABLE IF NOT EXISTS "user" (
 	"name" text,
 	"email" text NOT NULL,
 	"emailVerified" timestamp,
-	"image" text
+	"image" text,
+	"family_id" integer
 );
 --> statement-breakpoint
 CREATE TABLE IF NOT EXISTS "verificationToken" (
@@ -108,7 +120,19 @@ EXCEPTION
 END $$;
 --> statement-breakpoint
 DO $$ BEGIN
+ ALTER TABLE "item_image" ADD CONSTRAINT "item_image_item_id_item_id_fk" FOREIGN KEY ("item_id") REFERENCES "public"."item"("id") ON DELETE no action ON UPDATE no action;
+EXCEPTION
+ WHEN duplicate_object THEN null;
+END $$;
+--> statement-breakpoint
+DO $$ BEGIN
  ALTER TABLE "session" ADD CONSTRAINT "session_userId_user_id_fk" FOREIGN KEY ("userId") REFERENCES "public"."user"("id") ON DELETE cascade ON UPDATE no action;
+EXCEPTION
+ WHEN duplicate_object THEN null;
+END $$;
+--> statement-breakpoint
+DO $$ BEGIN
+ ALTER TABLE "user" ADD CONSTRAINT "user_family_id_family_id_fk" FOREIGN KEY ("family_id") REFERENCES "public"."family"("id") ON DELETE no action ON UPDATE no action;
 EXCEPTION
  WHEN duplicate_object THEN null;
 END $$;

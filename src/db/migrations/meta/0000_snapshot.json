@@ -1,5 +1,5 @@
 {
-  "id": "519a83c0-28ef-4a27-a8b0-59234ec51aa5",
+  "id": "10385fe8-849b-4fee-840c-4571b6b1bde3",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "version": "7",
   "dialect": "postgresql",
@@ -175,8 +175,8 @@
         "authenticator_userId_credentialID_pk": {
           "name": "authenticator_userId_credentialID_pk",
           "columns": [
-            "userId",
-            "credentialID"
+            "credentialID",
+            "userId"
           ]
         }
       },
@@ -250,6 +250,12 @@
         },
         "name": {
           "name": "name",
+          "type": "varchar(255)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "description": {
+          "name": "description",
           "type": "varchar(511)",
           "primaryKey": false,
           "notNull": true
@@ -338,6 +344,68 @@
       "compositePrimaryKeys": {},
       "uniqueConstraints": {}
     },
+    "public.item_image": {
+      "name": "item_image",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "serial",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "item_id": {
+          "name": "item_id",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "url": {
+          "name": "url",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        },
+        "updated_at": {
+          "name": "updated_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        },
+        "deleted_at": {
+          "name": "deleted_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": false
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "item_image_item_id_item_id_fk": {
+          "name": "item_image_item_id_item_id_fk",
+          "tableFrom": "item_image",
+          "tableTo": "item",
+          "columnsFrom": [
+            "item_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {}
+    },
     "public.item_type": {
       "name": "item_type",
       "schema": "",
@@ -350,6 +418,12 @@
         },
         "name": {
           "name": "name",
+          "type": "varchar(255)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "description": {
+          "name": "description",
           "type": "varchar(511)",
           "primaryKey": false,
           "notNull": true
@@ -469,10 +543,30 @@
           "type": "text",
           "primaryKey": false,
           "notNull": false
+        },
+        "family_id": {
+          "name": "family_id",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false
         }
       },
       "indexes": {},
-      "foreignKeys": {},
+      "foreignKeys": {
+        "user_family_id_family_id_fk": {
+          "name": "user_family_id_family_id_fk",
+          "tableFrom": "user",
+          "tableTo": "family",
+          "columnsFrom": [
+            "family_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
       "compositePrimaryKeys": {},
       "uniqueConstraints": {}
     },
