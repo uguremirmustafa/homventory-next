@@ -149,3 +149,45 @@ export async function updateItemAction(form: ItemFormValues, id: number) {
     return errorJson({ message: 'Failed to update item.' });
   }
 }
+
+export async function deleteItemAction(id: number) {
+  const session = await auth();
+  if (!session?.user) {
+    return errorJson({ message: errors.unauthorized });
+  }
+
+  if (!session.user.familyId) {
+    return errorJson({
+      message: 'You do not have family, create your family first in profile page!',
+    });
+  }
+
+  try {
+    const deletedItem = await db.transaction(async (tx) => {
+      const updatedIds = await tx
+        .update(item)
+        .set({
+          deletedAt: new Date().toUTCString(),
+        })
+        .where(eq(item.id, id))
+        .returning({ id: item.id, itemTypeId: item.itemTypeID });
+
+      if (!updatedIds || updatedIds.length !== 1) {
+        tx.rollback();
+        return;
+      }
+      return updatedIds[0];
+    });
+    if (deletedItem) {
+      revalidatePath(`/items/${deletedItem?.itemTypeId}`);
+      return successJson({
+        message: `Deleted item: ${deletedItem?.id}`,
+        data: deletedItem,
+      });
+    } else {
+      return errorJson({ message: 'Deleted item not found' });
+    }
+  } catch (error) {
+    return errorJson({ message: 'Failed to delete item' });
+  }
+}

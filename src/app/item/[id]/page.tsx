@@ -19,6 +19,7 @@ import {
 import { Button } from '@/components/ui/button';
 import Icon from '@/components/icons';
 import { getItemWithDetails } from './queries';
+import ItemDropdown from './components/item-dropdown';
 
 export default async function ItemPage({ params }: { params: { id: string } }) {
   const session = await auth();
@@ -33,6 +34,7 @@ export default async function ItemPage({ params }: { params: { id: string } }) {
 
   const { name, description, id, typeIcon, typeId, typeName, url, owner, ownerAvatar, createdAt } =
     item;
+
   return (
     <div className="max-w-[500px]">
       <h1 className="text-xl md:text-2xl font-extrabold">{name}</h1>
@@ -55,25 +57,7 @@ export default async function ItemPage({ params }: { params: { id: string } }) {
           </Avatar>
           <p className="text-sm font-medium leading-none">{owner}</p>
         </div>
-        <div>
-          <DropdownMenu>
-            <DropdownMenuTrigger>
-              <Button variant="ghost" size="icon">
-                <Icon icon="verticalDots" />
-              </Button>
-            </DropdownMenuTrigger>
-            <DropdownMenuContent className="w-56">
-              <DropdownMenuLabel>Actions</DropdownMenuLabel>
-              <DropdownMenuSeparator />
-              <DropdownMenuItem className="flex justify-between" asChild>
-                <Link href={`/item/${id}/edit`}>
-                  <span>Edit item</span>
-                  <Icon icon="edit" />
-                </Link>
-              </DropdownMenuItem>
-            </DropdownMenuContent>
-          </DropdownMenu>
-        </div>
+        <ItemDropdown id={id} />
       </div>
       <p className="text-muted-foreground mt-4">{description}</p>
     </div>
