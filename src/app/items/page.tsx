@@ -1,12 +1,12 @@
 import { auth } from '@/auth';
 import PageTitle from '@/components/page-title';
 import { getItemTypes } from './queries';
-import { Icon as IconComponent } from '@iconify/react';
 import { Button } from '@/components/ui/button';
 import Link from 'next/link';
 import Icon from '@/components/icons';
 import { Separator } from '@/components/ui/separator';
 import { redirect } from 'next/navigation';
+import ItemTypeButton from './components/item-type-button';
 
 export default async function ItemsPage() {
   const session = await auth();
@@ -34,19 +34,9 @@ export default async function ItemsPage() {
       </div>
       <Separator className="my-4" />
       <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-4">
-        {itemTypes.map((x) => {
-          return (
-            <Button key={x.id} asChild variant="outline">
-              <Link
-                href={`/items/${x.id}`}
-                className="col-span-1 h-full aspect-square flex flex-col gap-2"
-              >
-                <IconComponent icon={x.icon} fontSize="56" />
-                <p className="text-center text-sm text-wrap">{x.name}</p>
-              </Link>
-            </Button>
-          );
-        })}
+        {itemTypes.map((x) => (
+          <ItemTypeButton itemType={x} key={x.icon} />
+        ))}
       </div>
     </div>
   );
