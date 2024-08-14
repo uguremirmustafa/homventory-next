@@ -4,13 +4,14 @@
   "type": "module",
   "private": true,
   "scripts": {
-    "dev": "next dev",
+    "dev": "PORT=4444 next dev",
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
     "db:studio": "cross-env NODE_ENV=development drizzle-kit studio --verbose",
     "db:generate": "cross-env NODE_ENV=development drizzle-kit generate",
     "db:push": "cross-env NODE_ENV=development drizzle-kit push",
+    "db:pull": "cross-env NODE_ENV=development drizzle-kit pull",
     "db:drop": "cross-env NODE_ENV=development drizzle-kit drop",
     "db:migrate": "cross-env NODE_ENV=development DB_MIGRATING=true tsx src/db/migrate.ts",
     "db:seed": "cross-env NODE_ENV=development DB_SEEDING=true tsx src/db/seeds/index.ts"

@@ -10,3 +10,8 @@ export const familyFormSchema = z.object({
 });
 
 export type FamilyFormValues = z.infer<typeof familyFormSchema>;
+
+export const familyJoinFormSchema = z.object({
+  code: z.string().min(4, { message: 'Code is too short' }),
+});
+export type FamilyJoinFormValues = z.infer<typeof familyJoinFormSchema>;
