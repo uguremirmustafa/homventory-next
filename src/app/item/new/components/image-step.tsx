@@ -9,11 +9,13 @@ import TakePicture from './take-picture';
 import {
   FormControl,
   FormDescription,
+  FormField,
   FormItem,
   FormLabel,
   FormMessage,
 } from '@/components/ui/form';
 import { cn } from '@/lib/utils';
+import { Input } from '@/components/ui/input';
 
 const imagePreferences = ['webcam', 'upload'] as const;
 
@@ -54,6 +56,20 @@ function ImageStep(): JSX.Element {
         <div className="flex gap-2">
           <ImageUpload onSuccess={onImageUpload} />
           <TakePicture onSuccess={onImageUpload} />
+          <FormField
+            control={form.control}
+            name="image"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Image Url</FormLabel>
+                <FormControl>
+                  <Input placeholder="https://myimage.com/sweater.jpg" {...field} />
+                </FormControl>
+                <FormDescription>You can directly store your image url here</FormDescription>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
         </div>
       )}
       {form.formState.errors.image && (

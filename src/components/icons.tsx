@@ -40,6 +40,9 @@ const icons = {
   resetImage: 'material-symbols:reset-image',
   check: 'material-symbols:check',
   image: 'material-symbols:image-outline',
+  save: 'lucide:save',
+  calendar: 'solar:calendar-linear',
+  linkExternal: 'akar-icons:link-out',
 } as const;
 
 interface IProps extends Omit<IconProps, 'icon'> {

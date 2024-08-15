@@ -1,5 +1,5 @@
 import db from '@/db';
-import { item, itemImage, itemType, users } from '@/db/schema';
+import { item, itemDetail, itemImage, itemType, users } from '@/db/schema';
 import { eq } from 'drizzle-orm';
 
 export async function getItemWithDetails(itemId: number) {
@@ -26,3 +26,13 @@ export async function getItemWithDetails(itemId: number) {
   }
   return items[0];
 }
+
+export async function getItemDetails(itemId: number) {
+  const itemDetails = await db.select().from(itemDetail).where(eq(itemDetail.itemId, itemId));
+  if (itemDetails.length !== 1) {
+    return null;
+  }
+  return itemDetails[0];
+}
+
+export type ItemDetail = ReturnType<typeof getItemDetails>;

@@ -1,27 +1,14 @@
+/* eslint-disable @next/next/no-img-element */
 import { Icon as IconComponent } from '@iconify/react';
-import db from '@/db';
-import { item, itemImage, itemType, users } from '@/db/schema';
-import { eq } from 'drizzle-orm';
-import Image from 'next/image';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { format } from 'date-fns';
 import Link from 'next/link';
 import { auth } from '@/auth';
 import { redirect } from 'next/navigation';
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-} from '@/components/ui/dropdown-menu';
-import { Button } from '@/components/ui/button';
-import Icon from '@/components/icons';
 import { getItemWithDetails } from './queries';
-import ItemDropdown from './components/item-dropdown';
+import ItemDropdown from '../components/item-dropdown';
 
-export default async function ItemPage({ params }: { params: { id: string } }) {
+export default async function ItemBasePage({ params }: { params: { id: string } }) {
   const session = await auth();
   if (!session?.user) {
     redirect(`/api/auth/signin?callbackUrl=/item/${params.id}`);
@@ -36,9 +23,16 @@ export default async function ItemPage({ params }: { params: { id: string } }) {
     item;
 
   return (
-    <div className="max-w-[500px]">
+    <div>
       <h1 className="text-xl md:text-2xl font-extrabold">{name}</h1>
-      <Image className="rounded my-4" height={500} width={500} src={url ?? ''} alt={name} />
+      <img
+        className="rounded my-4 w-full max-h-[300px] object-contain"
+        width={0}
+        height={0}
+        sizes="100vw"
+        src={url ?? ''}
+        alt={name}
+      />
       <div className="flex justify-between border-b pb-2 mb-3">
         <Link
           href={`/items/${typeId}`}
@@ -47,7 +41,7 @@ export default async function ItemPage({ params }: { params: { id: string } }) {
           <IconComponent icon={typeIcon} fontSize={14} />
           <p className="capitalize text-sm">{typeName}</p>
         </Link>
-        <p className="text-sm py-1">{format(new Date(createdAt), 'dd MMM yyyy')}</p>
+        <p className="text-sm py-1">added at {format(new Date(createdAt), 'dd MMM yyyy')}</p>
       </div>
       <div className="flex justify-between">
         <div className="flex gap-2 items-center">

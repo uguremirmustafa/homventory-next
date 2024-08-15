@@ -1,6 +1,6 @@
 import { getItemTypes } from '@/app/items/queries';
 import ItemForm from '../../new/components/item-form';
-import { getItemWithDetails } from '../queries';
+import { getItemWithDetails } from '../base/queries';
 import PageTitle from '@/components/page-title';
 
 export default async function EditItemPage({ params }: { params: { id: number } }) {

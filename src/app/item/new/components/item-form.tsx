@@ -93,7 +93,7 @@ function ItemForm(props: IProps): JSX.Element {
           if (!res?.success) {
             form.setError('root', { message: res.message });
           } else {
-            const path = `/item/${res.data?.id}`;
+            const path = `/item/${res.data?.id}/base`;
             router.push(path);
             toast({
               title: 'Success!',
@@ -105,7 +105,7 @@ function ItemForm(props: IProps): JSX.Element {
           if (!res?.success) {
             form.setError('root', { message: res.message });
           } else {
-            const path = `/item/${res.data?.id}`;
+            const path = `/item/${res.data?.id}/base`;
             router.push(path);
             toast({
               title: 'Success!',

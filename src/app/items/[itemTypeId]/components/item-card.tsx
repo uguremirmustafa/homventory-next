@@ -31,7 +31,7 @@ function ItemCard(props: IProps): JSX.Element {
       </CardContent>
       <CardFooter>
         <Button asChild variant="link" className="px-0">
-          <Link href={`/item/${id}`}>See details</Link>
+          <Link href={`/item/${id}/base`}>See details</Link>
         </Button>
       </CardFooter>
     </Card>
