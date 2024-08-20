@@ -65,13 +65,13 @@ function DetailsForm(props: IProps): JSX.Element {
           <form
             onSubmit={form.handleSubmit(onSubmit)}
             id="item-detail-form"
-            className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-8"
+            className="grid grid-cols-2 gap-4 md:gap-8"
           >
             <FormField
               control={form.control}
               name="price"
               render={({ field }) => (
-                <FormItem className="max-w-xs">
+                <FormItem className="max-w-xs col-span-2 md:col-span-1">
                   <FormLabel>Price</FormLabel>
                   <FormControl>
                     <Input placeholder="Price" {...field} />
@@ -86,7 +86,7 @@ function DetailsForm(props: IProps): JSX.Element {
               control={form.control}
               name="gatheringDate"
               render={({ field }) => (
-                <FormItem className="flex flex-col">
+                <FormItem className="flex flex-col col-span-2 md:col-span-1">
                   <FormLabel className="text-sm">Date of gathering</FormLabel>
                   <Popover>
                     <PopoverTrigger asChild>
@@ -128,7 +128,7 @@ function DetailsForm(props: IProps): JSX.Element {
                 <FormItem className="col-span-2">
                   <FormLabel>URL</FormLabel>
                   <FormControl>
-                    <div className="flex gap-4">
+                    <div className="flex flex-col md:flex-row gap-4">
                       <Input placeholder="https://amazon.co.uk/..." {...field} />
                       {field.value ? (
                         <Button asChild type="button" variant="secondary">
@@ -149,7 +149,7 @@ function DetailsForm(props: IProps): JSX.Element {
               control={form.control}
               name="brandName"
               render={({ field }) => (
-                <FormItem className="max-w-xs">
+                <FormItem className="max-w-xs col-span-2 md:col-span-1">
                   <FormLabel>Brand</FormLabel>
                   <FormControl>
                     <Input placeholder="Ikea, Mavi etc." {...field} />
