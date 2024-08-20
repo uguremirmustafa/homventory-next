@@ -53,9 +53,11 @@ function ImageStep(): JSX.Element {
         </div>
       ) : null}
       {!preference && !img && (
-        <div className="flex gap-2">
-          <ImageUpload onSuccess={onImageUpload} />
-          <TakePicture onSuccess={onImageUpload} />
+        <div className="flex flex-col gap-2">
+          <div className="flex gap-2">
+            <ImageUpload onSuccess={onImageUpload} />
+            <TakePicture onSuccess={onImageUpload} />
+          </div>
           <FormField
             control={form.control}
             name="image"
@@ -66,16 +68,15 @@ function ImageStep(): JSX.Element {
                   <Input placeholder="https://myimage.com/sweater.jpg" {...field} />
                 </FormControl>
                 <FormDescription>You can directly store your image url here</FormDescription>
-                <FormMessage />
               </FormItem>
             )}
           />
+          {form.formState.errors.image && (
+            <p className={cn('text-sm font-medium text-destructive mt-2')}>
+              {form.formState.errors.image.message}
+            </p>
+          )}
         </div>
-      )}
-      {form.formState.errors.image && (
-        <p className={cn('text-sm font-medium text-destructive mt-2')}>
-          {form.formState.errors.image.message}
-        </p>
       )}
     </div>
   );

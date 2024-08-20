@@ -43,6 +43,7 @@ const icons = {
   save: 'lucide:save',
   calendar: 'solar:calendar-linear',
   linkExternal: 'akar-icons:link-out',
+  warning: 'ph:warning-bold',
 } as const;
 
 interface IProps extends Omit<IconProps, 'icon'> {

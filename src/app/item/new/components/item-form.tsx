@@ -4,7 +4,7 @@ import { itemFormSchema, ItemFormValues } from '../schema';
 import { useState, useTransition } from 'react';
 import { ItemType } from '@/app/items/queries';
 import ItemTypeSelector from './item-type-selector';
-import { Form, FormMessage } from '@/components/ui/form';
+import { Form } from '@/components/ui/form';
 import { toast } from '@/components/ui/use-toast';
 import { Button } from '@/components/ui/button';
 import Icon from '@/components/icons';
@@ -22,6 +22,7 @@ import {
 import { zodResolver } from '@hookform/resolvers/zod';
 import { createItemAction, updateItemAction } from '../actions';
 import { useRouter } from 'next/navigation';
+import { Session } from 'next-auth';
 
 interface IProps {
   itemTypes: ItemType[];
