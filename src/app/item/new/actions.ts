@@ -1,6 +1,4 @@
 'use server';
-import { promises as fs } from 'fs';
-import path from 'path';
 import crypto from 'crypto';
 import { auth } from '@/auth';
 import { errors } from '@/lib/error';
@@ -10,9 +8,9 @@ import db from '@/db';
 import { item, itemImage } from '@/db/schema';
 import { revalidatePath } from 'next/cache';
 import { eq } from 'drizzle-orm';
+import { put } from '@vercel/blob';
 
-const MAX_FILE_SIZE = 1 * 1024 * 1024; // 1MB
-const BASE_URL = process.env.BASE_URL || 'http://localhost:3002';
+const MAX_FILE_SIZE = 4 * 1024 * 1024; // 1MB
 
 export async function uploadImageAction(buffer: Uint8Array) {
   const session = await auth();
@@ -21,21 +19,16 @@ export async function uploadImageAction(buffer: Uint8Array) {
   }
 
   if (buffer.length > MAX_FILE_SIZE) {
-    return errorJson({ message: 'File size exceeds the 1MB limit.' });
+    return errorJson({ message: 'File size exceeds the 4MB limit.' });
   }
 
   const uniqueFileName = `${crypto.randomBytes(16).toString('hex')}.png`;
-  const uploadDir = path.join(process.cwd(), 'public', 'uploads');
-  const filePath = path.join(uploadDir, uniqueFileName);
   try {
-    await fs.mkdir(uploadDir, { recursive: true });
     const nodeBuffer = Buffer.from(buffer);
-
-    await fs.writeFile(filePath, nodeBuffer);
-
-    const fileUrl = `${BASE_URL}/uploads/${uniqueFileName}`;
-
-    return successJson({ message: 'Image uploaded successfully!', data: fileUrl });
+    const blob = await put(uniqueFileName, nodeBuffer, {
+      access: 'public',
+    });
+    return successJson({ message: 'Image uploaded successfully!', data: blob.url });
   } catch (err) {
     console.error(err);
     return errorJson({ message: 'Failed to upload image.' });

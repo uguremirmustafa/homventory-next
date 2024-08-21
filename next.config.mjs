@@ -10,6 +10,11 @@ const nextConfig = {
         protocol: 'http',
         hostname: 'localhost',
       },
+      {
+        protocol: 'https',
+        hostname: 'j5yeocl1vvllwlak.public.blob.vercel-storage.com',
+        port: '',
+      },
     ],
   },
   experimental: {
