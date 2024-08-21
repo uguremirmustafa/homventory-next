@@ -12,12 +12,6 @@ import Webcam from 'react-webcam';
 import { uploadImageAction } from '../actions';
 import { toast } from '@/components/ui/use-toast';
 
-const videoConstraints = {
-  width: 1024,
-  height: 1024,
-  facingMode: 'user',
-};
-
 interface IProps {
   onSuccess: (imgUrl: string) => void;
 }
@@ -105,7 +99,7 @@ function TakePicture(props: IProps): JSX.Element {
                 ref={webcamRef}
                 screenshotFormat="image/jpeg"
                 width={1024}
-                videoConstraints={videoConstraints}
+                videoConstraints={{ width: 1024, height: 1024, facingMode: 'environment' }}
               />
             </div>
             <Button
