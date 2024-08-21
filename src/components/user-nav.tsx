@@ -29,7 +29,7 @@ export default function UserNavbar({ session }: { session: Session | null }) {
         <Button variant="ghost" className="relative h-8 w-8 rounded-full">
           <Avatar className="h-8 w-8">
             <AvatarImage src={user.image ?? ''} alt={user.name ?? ''} />
-            <AvatarFallback>SC</AvatarFallback>
+            <AvatarFallback className="uppercase">{user.name?.slice(0, 2)}</AvatarFallback>
           </Avatar>
         </Button>
       </DropdownMenuTrigger>
